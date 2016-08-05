@@ -142,7 +142,9 @@ class RouteAPI : public BaseAPI
                  * the overall response consistent.
                  */
 
-                guidance::trimShortSegments(steps, leg_geometry);
+                if (parameters.trim) {
+                  guidance::trimShortSegments(steps, leg_geometry);
+                }
                 leg.steps = guidance::postProcess(std::move(steps));
                 leg.steps = guidance::collapseTurns(std::move(leg.steps));
                 leg.steps = guidance::buildIntersections(std::move(leg.steps));

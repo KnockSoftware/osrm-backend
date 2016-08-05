@@ -54,6 +54,7 @@ struct MatchParameters : public RouteParameters
         : RouteParameters(false,
                           false,
                           false,
+                          false,
                           RouteParameters::GeometriesType::Polyline,
                           RouteParameters::OverviewType::Simplified,
                           {})
