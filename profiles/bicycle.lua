@@ -98,6 +98,11 @@ properties.continue_straight_at_waypoint = false
 
 local obey_oneway               = true
 local ignore_areas              = true
+
+-- multiply ped speed by this factor for areas, to encourage
+-- routing across real paths rather than the edges of plazas
+local area_derating             = 0.0
+
 local turn_penalty              = 60
 local turn_bias                 = 1.4
 -- reduce the driving speed by 30% for unsafe roads
@@ -185,9 +190,6 @@ function way_function (way, result)
     return
   end
 
-  result.forward_mode = mode.cycling
-  result.backward_mode = mode.cycling
-
   -- other tags
   local name = way:get_value_by_key("name")
   local ref = way:get_value_by_key("ref")
@@ -208,6 +210,13 @@ function way_function (way, result)
   local foot_forward = way:get_value_by_key("foot:forward")
   local foot_backward = way:get_value_by_key("foot:backward")
   local bicycle = way:get_value_by_key("bicycle")
+
+  if area == 'yes' and ignore_areas then
+    return
+  end
+
+  result.forward_mode = mode.cycling
+  result.backward_mode = mode.cycling
 
   -- name
   if ref and "" ~= ref and name and "" ~= name then
@@ -287,10 +296,17 @@ function way_function (way, result)
     if foot ~= 'no' and junction ~= "roundabout" then
       if pedestrian_speeds[highway] then
         -- pedestrian-only ways and areas
-        result.forward_speed = pedestrian_speeds[highway]
-        result.backward_speed = pedestrian_speeds[highway]
-        result.forward_mode = mode.pushing_bike
-        result.backward_mode = mode.pushing_bike
+        if area == 'yes' then
+          result.forward_speed = pedestrian_speeds[highway] * area_derating
+          result.backward_speed = pedestrian_speeds[highway] * area_derating
+          result.forward_mode = mode.pushing_bike
+          result.backward_mode = mode.pushing_bike
+        else
+          result.forward_speed = pedestrian_speeds[highway]
+          result.backward_speed = pedestrian_speeds[highway]
+          result.forward_mode = mode.pushing_bike
+          result.backward_mode = mode.pushing_bike
+        end
       elseif man_made and man_made_speeds[man_made] then
         -- man made structures
         result.forward_speed = man_made_speeds[man_made]
