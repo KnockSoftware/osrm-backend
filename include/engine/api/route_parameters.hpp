@@ -136,6 +136,7 @@ struct RouteParameters : public BaseParameters
     }
 
     bool steps = false;
+    bool trim = true;
     // TODO: in v6 we should remove the boolean and only keep the number parameter; for compat.
     bool alternatives = false;
     unsigned number_of_alternatives = 0;

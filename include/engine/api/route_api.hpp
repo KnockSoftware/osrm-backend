@@ -171,7 +171,9 @@ class RouteAPI : public BaseAPI
                  *      expects post-processed roundabouts
                  */
 
-                guidance::trimShortSegments(steps, leg_geometry);
+                if (parameters.trim) {
+                  guidance::trimShortSegments(steps, leg_geometry);
+                }
                 leg.steps = guidance::handleRoundabouts(std::move(steps));
                 leg.steps = guidance::collapseTurnInstructions(std::move(leg.steps));
                 leg.steps = guidance::anticipateLaneChange(std::move(leg.steps));
