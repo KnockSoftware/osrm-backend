@@ -704,6 +704,20 @@ inline bool parseCommonParameters(const v8::Local<v8::Object> &obj, ParamType &p
         }
     }
 
+    if (obj->Has(Nan::New("trim").ToLocalChecked()))
+    {
+        auto trim = obj->Get(Nan::New("trim").ToLocalChecked());
+        if (trim->IsBoolean())
+        {
+            params->trim = trim->BooleanValue();
+        }
+        else
+        {
+            Nan::ThrowError("'trim' param must be a boolean");
+            return false;
+        }
+    }
+
     if (obj->Has(Nan::New("geometries").ToLocalChecked()))
     {
         v8::Local<v8::Value> geometries = obj->Get(Nan::New("geometries").ToLocalChecked());
