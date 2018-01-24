@@ -5,3 +5,5 @@ boost*
 node_modules/
 .git/
 Dockerfile
+docker/
+.dockerignore

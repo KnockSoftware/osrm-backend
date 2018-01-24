@@ -25,6 +25,7 @@ osrm-deps
 *.7z
 *.dmg
 *.gz
+*.tgz
 *.iso
 *.jar
 *.rar
